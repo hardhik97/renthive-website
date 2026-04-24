@@ -14,9 +14,9 @@ input,select,textarea,button{font-family:inherit;}a{text-decoration:none;color:i
 #nav{position:fixed;top:0;left:0;right:0;z-index:999;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(0,0,0,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
 .nav-logo{font-size:20px;font-weight:800;background:linear-gradient(90deg,var(--gold),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;cursor:pointer;}
 .nav-links{display:flex;gap:24px;}
-.nav-links span{font-size:13px;color:var(--muted);cursor:pointer;transition:color .2s;padding:4px 0;border-bottom:2px solid transparent;}
-.nav-links span:hover{color:#fff;}
-.nav-links span.active{color:#fff;border-bottom-color:var(--gold);}
+.nav-links span{font-size:13px;color:var(--muted);cursor:pointer;transition:all .25s;padding:6px 14px;border-radius:20px;border-bottom:none;}
+.nav-links span:hover{color:#fff;background:rgba(255,255,255,.06);}
+.nav-links span.active{color:#fff;background:linear-gradient(135deg,rgba(245,166,35,.18),rgba(224,64,251,.18));border:1px solid rgba(245,166,35,.3);box-shadow:0 0 12px rgba(245,166,35,.15);font-weight:700;}
 .nav-right{display:flex;gap:10px;align-items:center;}
 .nbtn{padding:7px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border:none;}
 .nbtn.ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
@@ -325,9 +325,53 @@ footer{padding:36px 24px;display:flex;justify-content:space-between;align-items:
 .ai-input-row{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;}
 .ai-input-row input{flex:1;padding:8px 12px;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:#fff;font-size:13px;outline:none;}
 .ai-send{padding:8px 14px;background:linear-gradient(135deg,var(--purple),var(--pink));border:none;border-radius:8px;color:#fff;font-size:13px;cursor:pointer;}
-</style>
+
+/* ── CANCEL BOOKING ── */
+.cancel-btn{padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#f87171;transition:all .2s;margin-top:4px;}
+.cancel-btn:hover{background:rgba(239,68,68,.18);border-color:rgba(239,68,68,.5);}
+.cancelled-tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.2);}
+
+/* ── EDIT / REMOVE LISTING ── */
+.listing-actions{display:flex;gap:6px;flex-direction:column;align-items:flex-end;flex-shrink:0;}
+.edit-btn{padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid rgba(245,166,35,.3);background:rgba(245,166,35,.08);color:#fbbf24;transition:all .2s;}
+.edit-btn:hover{background:rgba(245,166,35,.18);}
+.remove-btn{padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.08);color:#f87171;transition:all .2s;}
+.remove-btn:hover{background:rgba(239,68,68,.18);}
+
+/* ── FLOATING ORBS (eye candy) ── */
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(80px);animation:orbFloat 12s ease-in-out infinite;}
+.orb1{width:400px;height:400px;background:radial-gradient(circle,rgba(124,58,237,.12),transparent 70%);top:-100px;left:-100px;animation-duration:15s;}
+.orb2{width:300px;height:300px;background:radial-gradient(circle,rgba(245,166,35,.08),transparent 70%);bottom:20%;right:-80px;animation-duration:18s;animation-delay:-6s;}
+.orb3{width:250px;height:250px;background:radial-gradient(circle,rgba(6,182,212,.08),transparent 70%);top:50%;left:40%;animation-duration:20s;animation-delay:-10s;}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1);}33%{transform:translateY(-30px) scale(1.05);}66%{transform:translateY(20px) scale(.95);}}
+
+/* ── SHIMMER on item cards ── */
+@keyframes shimmerSlide{0%{background-position:-200% 0;}100%{background-position:200% 0;}}
+.item-card::after{content:'';position:absolute;inset:0;border-radius:16px;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.04) 50%,transparent 60%);background-size:200% 100%;opacity:0;transition:opacity .2s;}
+.item-card{position:relative;}
+.item-card:hover::after{opacity:1;animation:shimmerSlide .8s ease;}
+
+/* ── BROWSE search empty state ── */
+.search-empty{grid-column:1/-1;text-align:center;padding:80px 20px;}
+.search-empty .empty-icon{font-size:64px;margin-bottom:16px;animation:bounce 2s ease infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.search-empty h3{font-size:20px;font-weight:700;margin-bottom:8px;}
+.search-empty p{color:var(--muted);font-size:14px;}
+
+/* ── GLOW on nav active pill ── */
+@keyframes navGlow{0%,100%{box-shadow:0 0 10px rgba(245,166,35,.15);}50%{box-shadow:0 0 18px rgba(245,166,35,.3);}}
+.nav-links span.active{animation:navGlow 2.5s ease-in-out infinite;}
+
+/* ── Item card entry animation ── */
+@keyframes cardFadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.item-card{animation:cardFadeUp .4s ease both;}</style>
 </head>
 <body>
+
+<!-- AMBIENT ORBS -->
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
 
 <!-- NAV -->
 <nav id="nav">
@@ -904,8 +948,8 @@ function renderHomeFeatured(){
   const c=document.getElementById('home-listings');if(!c)return;
   c.innerHTML=S.listings.slice(0,3).map(itemCardHTML).join('');
 }
-function itemCardHTML(l){
-  return`<div class="item-card" onclick="openDetail(${l.id})">
+function itemCardHTML(l,i=0){
+  return`<div class="item-card" onclick="openDetail(${l.id})" style="animation-delay:${i*0.05}s">
     <div class="item-img ${l.imgClass}">${l.emoji}
       ${l.verified?'<div class="v-badge">✓ Verified</div>':''}
       <div class="dist-badge">📍 ${l.dist} km</div>
@@ -920,8 +964,67 @@ function itemCardHTML(l){
     </div>
   </div>`;
 }
+// ── SEARCH SYNONYMS MAP ──
+const searchSynonyms={
+  // Vehicles
+  'car':['vehicle','vehicles','tesla','car','cars','auto','automobile','scooter','bike','motorcycle'],
+  'vehicle':['vehicle','vehicles','car','cars','tesla','scooter','auto','automobile'],
+  'tesla':['tesla','vehicle','car','electric'],
+  'bike':['bike','scooter','motorcycle','vehicle','cycle'],
+  // Electronics
+  'camera':['camera','sony','gopro','photography','drone','photo','video','mirrorless'],
+  'drone':['drone','camera','electronics','aerial','photography'],
+  'gopro':['gopro','camera','action','electronics','video'],
+  'projector':['projector','4k','movie','presentation','screen'],
+  'electronics':['electronics','camera','drone','gopro','projector','tech'],
+  'phone':['phone','electronics','tech'],
+  // Outdoor
+  'tent':['tent','camping','outdoor','camp','kayak','outdoor'],
+  'kayak':['kayak','outdoor','water','canoe','paddle','boat'],
+  'camping':['camping','tent','outdoor','kayak','lantern','stove'],
+  'outdoor':['outdoor','tent','kayak','camping','nature','adventure'],
+  'boat':['boat','kayak','canoe','water','outdoor'],
+  // Tools
+  'drill':['drill','tools','milwaukee','power','tool'],
+  'tools':['tools','drill','power','generator','tool','equipment'],
+  'equipment':['equipment','tools','drill'],
+  // Events
+  'speaker':['speaker','events','dj','audio','music','sound'],
+  'dj':['dj','events','speaker','music','controller','audio'],
+  'events':['events','speaker','dj','table','projector','audio'],
+  'party':['party','events','speaker','dj','projector'],
+  // Garden
+  'garden':['garden','mower','lawn','outdoor','washer'],
+  'mower':['mower','garden','lawn'],
+  // Fashion
+  'fashion':['fashion','clothing','dress','outfit','designer'],
+  'dress':['dress','fashion','clothing','outfit'],
+};
+
+function getSearchTerms(q){
+  q=q.toLowerCase().trim();
+  const terms=new Set([q]);
+  // Add individual words
+  q.split(/\s+/).forEach(w=>{
+    terms.add(w);
+    if(searchSynonyms[w])searchSynonyms[w].forEach(s=>terms.add(s));
+  });
+  // Check full phrase synonyms
+  if(searchSynonyms[q])searchSynonyms[q].forEach(s=>terms.add(s));
+  return terms;
+}
+
+function matchesSearch(l, terms){
+  const haystack=[
+    l.title,l.cat,l.desc||'',l.location||'',
+    ...(l.features||[]),(l.owner||''),(l.tags||[]).join(' ')
+  ].join(' ').toLowerCase();
+  for(const t of terms){if(haystack.includes(t))return true;}
+  return false;
+}
+
 function renderListings(){
-  const q=(v('search-q')||'').toLowerCase();
+  const q=(v('search-q')||'').trim();
   const cat=v('search-cat')||'';
   const sort=v('search-sort')||'dist';
   const maxP=parseInt(document.getElementById('price-max').value||500);
@@ -930,20 +1033,42 @@ function renderListings(){
   const r45=document.getElementById('r45').checked;
   const verOnly=document.getElementById('verified-only').checked;
   let items=[...S.listings];
-  if(q)items=items.filter(l=>l.title.toLowerCase().includes(q)||l.cat.toLowerCase().includes(q)||l.location.toLowerCase().includes(q));
+
+  // Smart semantic search
+  if(q){
+    const terms=getSearchTerms(q);
+    items=items.filter(l=>matchesSearch(l,terms));
+  }
+
+  // Category filter
   if(cat)items=items.filter(l=>l.cat===cat);
+
+  // Price + radius
   items=items.filter(l=>l.price<=maxP&&l.dist<=radius);
-  if(r45)items=items.filter(l=>l.rating>=4.5);
+
+  // Rating — strict: >4.5 means strictly above 4.5
+  if(r45)items=items.filter(l=>l.rating>4.5);
   else if(r4)items=items.filter(l=>l.rating>=4);
+
   if(verOnly)items=items.filter(l=>l.verified);
+
+  // Sort
   if(sort==='dist')items.sort((a,b)=>a.dist-b.dist);
   else if(sort==='price-asc')items.sort((a,b)=>a.price-b.price);
   else if(sort==='price-desc')items.sort((a,b)=>b.price-a.price);
   else if(sort==='rating')items.sort((a,b)=>b.rating-a.rating);
+
   const g=document.getElementById('listings-grid');if(!g)return;
-  g.innerHTML=!items.length
-    ?'<div class="empty" style="grid-column:1/-1"><div class="icon">🔍</div><p>No listings match your filters.<br><span style="color:var(--gold);cursor:pointer" onclick="resetFilters()">Reset filters</span></p></div>'
-    :items.map(itemCardHTML).join('');
+  if(!items.length){
+    g.innerHTML=`<div class="search-empty">
+      <div class="empty-icon">🔍</div>
+      <h3>No results found</h3>
+      <p>No items match "${q||'your filters'}".<br/>
+      <span style="color:var(--gold);cursor:pointer" onclick="resetFilters()">Clear filters and try again →</span></p>
+    </div>`;
+  } else {
+    g.innerHTML=items.map((l,i)=>itemCardHTML(l,i)).join('');
+  }
 }
 function resetFilters(){
   document.getElementById('search-q').value='';
@@ -1245,6 +1370,26 @@ function submitListing(){
   const title=v('li-title'),cat=v('li-cat'),desc=v('li-desc'),price=parseFloat(v('li-price')),deposit=parseFloat(v('li-deposit')||0),location=v('li-location'),emoji=v('li-emoji');
   if(!title||!cat||!desc||!price||!location){return toast('Please fill all required fields (*)','err');}
   if(price<1){return toast('Price must be at least $1/day','err');}
+
+  // EDIT MODE
+  if(S._editingListingId){
+    const idx=S.listings.findIndex(l=>l.id===S._editingListingId);
+    if(idx>-1){
+      S.listings[idx]={...S.listings[idx],title,cat,desc,price,deposit,location,emoji,pickup:v('li-pickup')||S.listings[idx].pickup};
+      const extras=JSON.parse(localStorage.getItem('rh_extra_listings')||'[]');
+      const ei=extras.findIndex(l=>l.id===S._editingListingId);
+      if(ei>-1)extras[ei]={...extras[ei],title,cat,desc,price,deposit,location,emoji};
+      localStorage.setItem('rh_extra_listings',JSON.stringify(extras));
+    }
+    S._editingListingId=null;
+    toast('✅ Listing updated!');
+    ['li-title','li-desc','li-price','li-deposit','li-location','li-pickup'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    document.getElementById('li-cat').value='';document.getElementById('price-hint').style.display='none';
+    setTimeout(()=>{go('dashboard');setTimeout(()=>dashTab('listings',document.getElementById('dt-listings')),100);},800);
+    return;
+  }
+
+  // CREATE MODE
   const gArr=['g1','g2','g3','g4','g5','g6'];
   const newL={id:Date.now(),title,cat,price,deposit,rating:5.0,reviews:0,dist:Math.round((Math.random()*4+.5)*10)/10,desc,features:[],emoji,imgClass:gArr[Math.floor(Math.random()*gArr.length)],location,owner:`${S.user.first} ${S.user.last||''}`.trim(),ownerKey:'my_'+S.user.id,ownerInitial:S.user.first[0].toUpperCase(),ownerColor:'#7c3aed,#e040fb',verified:S.user.verified,pickup:v('li-pickup')||'Contact owner to arrange pickup.',reviewsList:[]};
   S.listings.unshift(newL);
@@ -1273,7 +1418,7 @@ function renderDashboard(){
   const items=[...myBookings.map(b=>({text:`Booked: ${b.itemTitle}`,sub:`${b.start} → ${b.end} · $${b.total} · ${b.status}`,icon:b.itemEmoji,status:b.status})),...myListings.map(l=>({text:`Listed: ${l.title}`,sub:`$${l.price}/day · ${l.location}`,icon:l.emoji,status:'live'}))];
   ra.innerHTML=!items.length?`<div class="empty"><div class="icon">📭</div><p>No activity yet. <span style="color:var(--gold);cursor:pointer" onclick="go('browse')">Start browsing →</span></p></div>`:items.slice(0,6).map(a=>`<div class="booking-row"><div class="booking-info"><h4>${a.icon} ${a.text}</h4><p>${a.sub}</p></div><div class="tag green">${a.status}</div></div>`).join('');
   document.getElementById('my-bookings').innerHTML=!myBookings.length?`<div class="empty"><div class="icon">📅</div><p>No bookings yet. <span style="color:var(--gold);cursor:pointer" onclick="go('browse')">Browse items →</span></p></div>`:myBookings.map(b=>`
-    <div class="booking-row">
+    <div class="booking-row" id="brow-${b.id}">
       <div class="booking-info">
         <h4>${b.itemEmoji} ${b.itemTitle}</h4>
         <p>📅 ${b.start} → ${b.end} · ⏰ ${b.time}</p>
@@ -1281,15 +1426,23 @@ function renderDashboard(){
         <p style="margin-top:4px;color:rgba(255,255,255,.3);font-size:12px;">📋 ${b.pickup}</p>
       </div>
       <div style="text-align:right;flex-shrink:0;">
-        <div class="tag ${b.status==='picked_up'?'purple':'green'}" style="margin-bottom:6px;">${b.status==='picked_up'?'Picked up':'Confirmed'}</div>
-        ${b.status==='confirmed'?`<button class="btn secondary" style="font-size:11px;padding:5px 10px;margin-top:4px;" onclick="showOTPModal('${b.otpCode}')">🔑 OTP Verify</button>`:''}
+        ${b.status==='cancelled'
+          ?'<span class="cancelled-tag">❌ Cancelled</span>'
+          :`<div class="tag ${b.status==='picked_up'?'purple':'green'}" style="margin-bottom:6px;">${b.status==='picked_up'?'Picked up':'Confirmed'}</div>
+           ${b.status==='confirmed'?`<button class="btn secondary" style="font-size:11px;padding:5px 10px;margin-top:4px;display:block;" onclick="showOTPModal('${b.otpCode}')">🔑 OTP Verify</button>`:''}
+           <button class="cancel-btn" onclick="cancelBooking(${b.id})">✕ Cancel Booking</button>`
+        }
       </div>
     </div>`).join('');
   document.getElementById('my-listings').innerHTML=!myListings.length?`<div class="empty"><div class="icon">📦</div><p>No listings yet. <span style="color:var(--gold);cursor:pointer" onclick="go('list-item')">List your first item →</span></p></div>`:myListings.map(l=>`
-    <div class="ml-row">
+    <div class="ml-row" id="lrow-${l.id}">
       <div class="ml-img ${l.imgClass}">${l.emoji}</div>
       <div class="ml-info"><h4>${l.title}</h4><p>$${l.price}/day · 📍 ${l.location}</p></div>
-      <div class="tag green">Live</div>
+      <div class="listing-actions">
+        <div class="tag green" style="margin-bottom:4px;">Live</div>
+        <button class="edit-btn" onclick="editListing(${l.id})">✏️ Edit</button>
+        <button class="remove-btn" onclick="removeListing(${l.id})">🗑 Remove</button>
+      </div>
     </div>`).join('');
   document.getElementById('e-total').textContent='$'+totalEarned;
   document.getElementById('e-month').textContent='$'+Math.round(totalEarned*.3);
@@ -1308,6 +1461,48 @@ function dashTab(tab,el){
   document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
   document.getElementById('dp-'+tab).classList.add('active');
   if(el)el.classList.add('active');
+}
+
+// ── CANCEL BOOKING ──
+function cancelBooking(bookingId){
+  const b=S.bookings.find(x=>x.id===bookingId);
+  if(!b||b.status==='cancelled'){return toast('Booking already cancelled','err');}
+  if(!confirm('Are you sure you want to cancel this booking?\n\nNote: Cancellations within 24hrs of pickup may incur a 50% fee.'))return;
+  b.status='cancelled';
+  localStorage.setItem('rh_bookings',JSON.stringify(S.bookings));
+  toast('Booking cancelled. Refund processed within 2–3 business days.');
+  renderDashboard();
+}
+
+// ── REMOVE LISTING ──
+function removeListing(listingId){
+  if(!confirm('Remove this listing? It will no longer appear in search results.'))return;
+  S.listings=S.listings.filter(l=>l.id!==listingId);
+  const extras=JSON.parse(localStorage.getItem('rh_extra_listings')||'[]').filter(l=>l.id!==listingId);
+  localStorage.setItem('rh_extra_listings',JSON.stringify(extras));
+  toast('Listing removed successfully.');
+  renderDashboard();
+}
+
+// ── EDIT LISTING ──
+function editListing(listingId){
+  const l=S.listings.find(x=>x.id===listingId);
+  if(!l)return;
+  go('list-item');
+  setTimeout(()=>{
+    document.getElementById('li-title').value=l.title||'';
+    document.getElementById('li-cat').value=l.cat||'';
+    document.getElementById('li-desc').value=l.desc||'';
+    document.getElementById('li-price').value=l.price||'';
+    document.getElementById('li-deposit').value=l.deposit||'';
+    document.getElementById('li-location').value=l.location||'';
+    document.getElementById('li-pickup').value=l.pickup||'';
+    document.getElementById('li-emoji').value=l.emoji||'📦';
+    aiPriceHint();
+    // Replace submit to update instead of create
+    S._editingListingId=listingId;
+    toast('✏️ Editing listing — make changes and click Publish to save.');
+  },150);
 }
 function saveProfile(){
   if(!S.user)return;
