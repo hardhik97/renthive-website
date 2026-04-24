@@ -27,8 +27,8 @@ input,select,textarea,button{font-family:inherit;}a{text-decoration:none;color:i
 .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--pink));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;cursor:pointer;}
 
 /* PAGES */
-.page{display:none;min-height:100vh;padding-top:56px;}
-.page.active{display:block;}
+.page{display:none !important;min-height:100vh;padding-top:56px;}
+.page.active{display:block !important;}
 
 /* HELPERS */
 .container{max-width:1100px;margin:0 auto;padding:0 24px;}
@@ -380,7 +380,7 @@ footer{padding:36px 24px;display:flex;justify-content:space-between;align-items:
 <!-- ════════════════════════════════════════
      HOME
 ════════════════════════════════════════ -->
-<div class="page active" id="home">
+<div class="page" id="home">
   <section id="home-hero">
     <canvas id="heroCanvas"></canvas>
     <div class="hero-content">
@@ -845,8 +845,10 @@ function setUser(u){
   document.getElementById('nav-uname').textContent=u.first;
   document.getElementById('nav-avatar').textContent=u.first[0].toUpperCase();
   toast('Welcome, '+u.first+'! 🐝');
-  if(S.pendingAction){const fn=S.pendingAction;S.pendingAction=null;setTimeout(fn,300);}
-  else go('home');
+  const action=S.pendingAction;
+  S.pendingAction=null;
+  if(action){setTimeout(action,300);}
+  else{setTimeout(()=>go('home'),300);}
 }
 function logout(){
   S.user=null;S.pendingAction=null;
@@ -867,19 +869,28 @@ function restoreSession(){
 // NAVIGATION
 // ══════════════════════════════════════════════════
 function go(page){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  // 1. Guard: auth-required pages
+  if((page==='dashboard'||page==='chat'||page==='list-item')&&!S.user){
+    S.pendingAction=()=>go(page);showAuth('login');return;
+  }
+  // 2. Hide ALL pages
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='none';});
+  // 3. Show requested page
   const pg=document.getElementById(page);
-  if(!pg){console.warn('Page not found:',page);return;}
-  pg.classList.add('active');
+  if(!pg){console.warn('Page not found:',page);go('home');return;}
+  pg.classList.add('active');pg.style.display='block';
+  // 4. Nav active state
   document.querySelectorAll('.nav-links span').forEach(s=>s.classList.remove('active'));
-  const nl=document.getElementById('nl-'+page)||document.getElementById('nl-'+{detail:'browse',auth:'home'}[page]);
+  const alias={detail:'browse',auth:'home'};
+  const nl=document.getElementById('nl-'+(alias[page]||page));
   if(nl)nl.classList.add('active');
+  // 5. Scroll top
   window.scrollTo(0,0);
+  // 6. Page init
   if(page==='home'){renderHomeFeatured();resetHomeSearch();}
   if(page==='browse')renderListings();
-  if(page==='dashboard'){if(!S.user){requireAuth(()=>go('dashboard'));return;}renderDashboard();}
-  if(page==='chat'){if(!S.user){requireAuth(()=>go('chat'));return;}renderConvList();}
-  if(page==='list-item'&&!S.user){requireAuth(()=>go('list-item'));return;}
+  if(page==='dashboard')renderDashboard();
+  if(page==='chat')renderConvList();
 }
 function resetHomeSearch(){
   const hq=document.getElementById('hero-q');const hc=document.getElementById('hero-cat');
@@ -1429,10 +1440,13 @@ function v(id){const el=document.getElementById(id);return el?el.value:'';}
 // INIT
 // ══════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded',()=>{
+  // Hide all pages immediately before anything renders
+  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');p.style.display='none';});
   restoreSession();
   initCanvas();
   initReveal();
-  renderHomeFeatured();
+  // Show home page only
+  go('home');
   // Close modals on overlay click
   document.getElementById('payModal').addEventListener('click',e=>{if(e.target===document.getElementById('payModal'))closePayModal();});
   document.getElementById('otpModal').addEventListener('click',e=>{if(e.target===document.getElementById('otpModal'))document.getElementById('otpModal').classList.remove('open');});
